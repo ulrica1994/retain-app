@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
     // moduleId: module.id,
@@ -40,6 +40,7 @@ import { Component, Input } from '@angular/core';
         class="note-card row shadow-1"
         (mouseleave) = "toggleCheck()"
         (mouseenter) = "toggleCheck()"
+        [ngStyle]="{'background-color': note.color}"
         >
             <div 
             class="icon" 
@@ -60,12 +61,13 @@ import { Component, Input } from '@angular/core';
 export class NoteCard { 
     @Input()
     note = {};
+    @Output() checked = new EventEmitter();
     showCheck: boolean = false;
 
     toggleCheck(): void {
         this.showCheck = !this.showCheck;
     }
     onChecked():void {
-        console.log('checked');
+        this.checked.next(this.note);
     }
 }
