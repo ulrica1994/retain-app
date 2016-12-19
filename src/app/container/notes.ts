@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NoteService } from '../services';
 
 @Component({
     // moduleId: module.id,
@@ -13,8 +14,8 @@ import { Component } from '@angular/core';
           <note-card
             class="col-xs-4"
             [note]="note"
-            *ngFor="let note of notes; let i = index"
-            (checked)="onNoteChecked(i)"
+            *ngFor="let note of notes;"
+            (checked)="onNoteChecked($event)"
           >
           </note-card>
         </div>
@@ -31,15 +32,20 @@ import { Component } from '@angular/core';
     `]
 })
 export class NotesContainer {
-    notes = [
-      {title: 'This is first note!', value: 'eat some food', color: 'lightblue'},
-      {title: 'This is second note!', value: 'read book', color: 'red'},
-      {title: 'This is third note!', value: 'wash clothes', color: 'yellow'}
-    ];
-    onNoteChecked(i: number) {
-      this.notes.splice(i,1);
+    notes = [];
+    constructor(private noteService: NoteService) {
+      this.noteService.getNotes()
+      .subscribe(resp => this.notes = resp.data);
+    }
+    onNoteChecked(note) {
+      this.noteService.completeNote(note)
+      .subscribe(note => {
+        const i = this.notes.findIndex(localNote => localNote.id === note.id);
+        this.notes.splice(i,1);
+      })
     }
     onCreateNote(note) {
-      this.notes.push(note);
+      this.noteService.createNote(note)
+      .subscribe(note => this.notes.push(note))
     }
  }
