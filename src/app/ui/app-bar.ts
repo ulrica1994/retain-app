@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../services/auth';
 @Component({
     selector: 'app-bar',
     styles: [`
@@ -28,12 +29,15 @@ import { Component } from '@angular/core';
         <nav class="col-xs-2">
         <div class="row middle-xs between-xs">
             <span class="link" [routerLink]="['','about']">About</span>
-            <span class="link">signout</span>
+            <span class="link" (click)="signout()">signout</span>
         </div>
         </nav>
     </header>
     `
 })
 export class AppBar {
-
+  constructor(private auth: AuthService) {}
+  signout() {
+    this.auth.signout();
+  }
 }

@@ -29,7 +29,8 @@ export class ApiService {
     }
 
     get(path: string): Observable<any> {
-        return this.http.get(`${this.api_url}${path}`,this.headers)
+        console.dir(this.headers);
+        return this.http.get(`${this.api_url}${path}`,{headers: this.headers})
         .map(this.checkForError)
         .catch(err => Observable.throw(err))
         .map(this.getJson);
@@ -47,7 +48,7 @@ export class ApiService {
         .map(this.getJson);
     }
     setHeaders(headers) {
-        Object.keys(this.headers)
+        Object.keys(headers)
         .forEach(header => this.headers.set(header,headers[header]));
     }
 }

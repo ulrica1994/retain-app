@@ -22,10 +22,12 @@ export class AuthService implements CanActivate {
         }
     }
     setJwt(jwt: string) {
+        this.JWT = jwt;
         window.localStorage.setItem(this.JWT_KEY,jwt);
         this.api.setHeaders({'Authorization':`Bearer ${jwt}`});
     }
     isAuthorized(): boolean {
+        // this.JWT = window.localStorage.getItem(this.JWT_KEY);
         return Boolean(this.JWT);
     }
     canActivate(): boolean {
@@ -48,6 +50,7 @@ export class AuthService implements CanActivate {
     }
     signout() {
         window.localStorage.removeItem(this.JWT_KEY);
+        this.JWT = '';
         this.store.purge();
         this.router.navigate(['','auth']); 
     }
